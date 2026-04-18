@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,7 @@
             --card-bg: rgba(20, 15, 30, 0.6);
             --text-main: #ffffff;
             --text-secondary: #a09bab;
+            --discord-color: #5865F2;
         }
 
         body {
@@ -30,10 +31,10 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-            padding-bottom: 100px; /* Чтобы плеер не перекрывал текст */
+            padding-bottom: 100px;
         }
 
-        /* Навигация */
+        /* Navigation */
         nav {
             width: 100%;
             padding: 20px 50px;
@@ -71,7 +72,7 @@
             animation: pulse-green 2s infinite;
         }
 
-        /* Главный блок (Hero) */
+        /* Hero Section */
         .hero {
             margin-top: 120px;
             text-align: center;
@@ -90,11 +91,11 @@
         .hero p {
             font-size: 1.2rem;
             color: var(--text-secondary);
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             line-height: 1.5;
         }
 
-        /* Окно со скриптом */
+        /* Script Box */
         .script-box {
             background: #0f0a18;
             border: 1px solid rgba(188, 19, 254, 0.3);
@@ -106,7 +107,7 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
             position: relative;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0 auto 20px auto;
         }
 
         .code {
@@ -135,7 +136,31 @@
             transform: scale(1.05);
         }
 
-        /* Сетка фич */
+        /* Discord Button */
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--discord-color);
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+            margin-top: 10px;
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(88, 101, 242, 0.8);
+            background: #4752c4;
+        }
+
+        /* Features Grid */
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -180,7 +205,7 @@
             line-height: 1.5;
         }
 
-        /* Блок Команды */
+        /* Team Section */
         .team-section {
             margin-top: 60px;
             text-align: center;
@@ -235,7 +260,7 @@
             100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
         }
 
-        /* Плеер */
+        /* Player */
         .player-container {
             position: fixed;
             bottom: 30px;
@@ -282,29 +307,33 @@
 
     <div class="hero">
         <h1>DOMINATE<br>THE GAME</h1>
-        <p>Ультимативный мобильный хаб. Написан с нуля. Плавный интерфейс, максимальная производительность и мощный функционал для твоих любимых режимов.</p>
+        <p>The ultimate multi-platform hub. Built from scratch for maximum performance and a flawless experience across your favorite games.</p>
         
         <div class="script-box">
             <div class="code" id="scriptCode">loadstring(game:HttpGet("https://raw.githubusercontent.com/BurmaldaHub/Burmalda/refs/heads/main/BurmaldaFree"))()</div>
             <button class="copy-btn" onclick="copyScript()">Copy</button>
         </div>
+
+        <a href="https://discord.gg/YOUR_INVITE_LINK" target="_blank" class="discord-btn">
+            👾 Join Our Discord
+        </a>
     </div>
 
     <div class="features">
         <div class="feature-card">
-            <div class="feature-icon">📱</div>
-            <div class="feature-title">Mobile First</div>
-            <div class="feature-desc">Никаких десктопных костылей. Полное отсутствие биндов клавиатуры и блюра. Идеальная работа тач-интерфейса на любых мобильных экзекьюторах.</div>
+            <div class="feature-icon">⚙️</div>
+            <div class="feature-title">Multi-Platform Support</div>
+            <div class="feature-desc">We go beyond mobile. Enjoy flawless execution and stable gameplay on both Mobile (Delta) and PC (Xeno) environments.</div>
         </div>
         <div class="feature-card">
             <div class="feature-icon">⚡</div>
-            <div class="feature-title">Powered by Luna</div>
-            <div class="feature-desc">Интерфейс полностью переписан на современную библиотеку Luna UI. Максимальный FPS, плавные анимации и удобное расположение элементов.</div>
+            <div class="feature-title">Neverlose UI Library</div>
+            <div class="feature-desc">Powered by the premium Neverlose UI library. Experience a sleek layout, maximum FPS, and incredibly smooth animations.</div>
         </div>
         <div class="feature-card">
             <div class="feature-icon">🎯</div>
-            <div class="feature-title">Top Tier Features</div>
-            <div class="feature-desc">Продвинутый Auto-Farm, точнейший ESP и Aimbot. Всё оптимизировано для работы без лагов даже на долгих сессиях.</div>
+            <div class="feature-title">Exclusive Features</div>
+            <div class="feature-desc">Dominate with our tailored toolkit: Infinite Stamina, High-Precision ESP, Autogenerator, and Speedhack.</div>
         </div>
     </div>
 
@@ -336,17 +365,17 @@
     </audio>
 
     <script>
-        // Копирование скрипта
+        // Copy Script Logic
         function copyScript() {
             const codeText = document.getElementById("scriptCode").innerText;
             navigator.clipboard.writeText(codeText).then(() => {
                 const btn = document.querySelector('.copy-btn');
-                btn.innerText = "Copied!";
+                btn.innerText = "COPIED!";
                 btn.style.background = "#00ff88";
                 btn.style.boxShadow = "0 0 20px #00ff88";
                 btn.style.color = "#000";
                 setTimeout(() => {
-                    btn.innerText = "Copy";
+                    btn.innerText = "COPY";
                     btn.style.background = "var(--accent-main)";
                     btn.style.boxShadow = "none";
                     btn.style.color = "#fff";
@@ -354,7 +383,7 @@
             });
         }
 
-        // Плеер
+        // Music Player Logic
         const audio = document.getElementById("bgAudio");
         const playBtn = document.getElementById("playBtn");
         const trackName = document.getElementById("trackName");
