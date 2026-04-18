@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burmalda Hub | Cyber Overload</title>
+    <title>Burmalda Hub | Premium Script</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -11,14 +11,14 @@
         :root {
             --bg-color: #07050d;
             --accent-main: #bc13fe;
-            --accent- glow: rgba(188, 19, 254, 0.5);
+            --accent-glow: rgba(188, 19, 254, 0.4);
             --card-bg: rgba(20, 15, 30, 0.7);
             --text-main: #ffffff;
             --text-secondary: #a09bab;
             --discord-color: #5865F2;
         }
 
-        /* Убираем курсор на десктопах */
+        /* Убираем стандартный курсор везде, кроме мобилок */
         @media (pointer: fine) {
             * {
                 cursor: none !important;
@@ -37,6 +37,17 @@
             align-items: center;
             overflow-x: hidden;
             padding-bottom: 120px;
+        }
+
+        /* 3D Canvas на задний фон */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Помещаем за всеми элементами */
+            pointer-events: none; /* Пропускаем клики сквозь канвас к кнопкам */
         }
 
         /* КАСТОМНЫЙ КУРСОР - ПРИЦЕЛ */
@@ -98,18 +109,7 @@
             * { cursor: auto !important; }
         }
 
-        /* 3D Scene Canvas */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1; /* Помещаем за всеми элементами */
-            pointer-events: none; /* Кнопки кликабельны сквозь канвас */
-        }
-
-        /* Навигация */
+        /* ОСТАЛЬНОЙ ДИЗАЙН САЙТА */
         nav {
             width: 100%;
             padding: 20px 50px;
@@ -147,13 +147,11 @@
             animation: pulse-green 2s infinite;
         }
 
-        /* Главный блок (Hero) */
         .hero {
             margin-top: 120px;
             text-align: center;
             padding: 50px 20px;
             max-width: 800px;
-            z-index: 10;
         }
 
         .hero h1 {
@@ -194,7 +192,6 @@
             background: #4752c4;
         }
 
-        /* ИГРЫ И СКРИПТЫ */
         .scripts-container {
             width: 100%;
             max-width: 800px;
@@ -251,7 +248,6 @@
             padding: 8px 16px;
             border-radius: 6px;
             font-weight: 800;
-            cursor: pointer;
             transition: 0.3s;
             margin-left: 15px;
             text-transform: uppercase;
@@ -262,7 +258,6 @@
             transform: scale(1.05);
         }
 
-        /* ФИЧИ */
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -294,7 +289,6 @@
         .feature-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; color: #fff; }
         .feature-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
 
-        /* КОМАНДА */
         .team-section { margin-top: 60px; text-align: center; width: 100%; z-index: 10; }
         .team-title { font-size: 2rem; font-weight: 900; text-transform: uppercase; margin-bottom: 30px; text-shadow: 0 0 20px var(--accent-glow); }
         .team-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
@@ -304,7 +298,6 @@
 
         .footer-section { margin-top: 60px; text-align: center; padding: 20px; z-index: 10; }
 
-        /* ПЛЕЕР */
         .player-container {
             position: fixed;
             bottom: 30px;
@@ -383,7 +376,7 @@
         </div>
         <div class="feature-card">
             <div class="feature-icon">⚡</div>
-            <div class="feature-title">Powered by Luna</div>
+            <div class="feature-title">Neverlose UI Library</div>
             <div class="feature-desc">Powered by the premium Neverlose UI library. Experience a sleek layout, maximum FPS, and incredibly smooth animations.</div>
         </div>
         <div class="feature-card">
@@ -394,7 +387,7 @@
     </div>
 
     <div class="team-section">
-        <div class="team-title hoverable-glitch">Our Team</div>
+        <div class="team-title">Our Team</div>
         <div class="team-grid">
             <div class="team-card">
                 <div class="team-role">Owner</div>
@@ -484,7 +477,7 @@
         }
         volumeControl.addEventListener("input", function() { audio.volume = this.value; });
 
-        // --- THREE.JS 3D ФОН И КУБ ---
+        // --- THREE.JS 3D ФОН И КУБ (ОБНОВЛЕННАЯ ЛОГИКА ВЗРЫВА) ---
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -501,8 +494,20 @@
             opacity: 0.3
         });
         const cube = new THREE.Mesh(geometry, material);
-        cube.position.set(3, 1, -5); // Смещаем куб немного вправо и вверх
+        cube.position.set(3, 1, -5); 
         scene.add(cube);
+
+        // Создаем звезды (частицы) на фоне
+        const particlesGeo = new THREE.BufferGeometry();
+        const particlesCount = 300;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 30;
+        }
+        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particleMaterial = new THREE.PointsMaterial({ size: 0.05, color: 0xbc13fe, transparent: true, opacity: 0.5 });
+        const particlesMesh = new THREE.Points(particlesGeo, particleMaterial);
+        scene.add(particlesMesh);
 
         camera.position.z = 5;
 
@@ -522,51 +527,116 @@
         // Raycaster для клика по кубу
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
-        let isSpinning = false; // Флаг быстрой раскрутки
+        
+        let isExploding = false;
+        let explosionGroup = null;
+
+        // ФУНКЦИЯ: Просчет случайной позиции, чтобы куб помещался в экран целиком
+        function getSafeRandomPosition() {
+            // Дистанция от камеры (z=5) до куба (z=-5) = 10
+            const distance = 10; 
+            // Конвертируем угол обзора (FOV) камеры в радианы
+            const vFOV = camera.fov * Math.PI / 180; 
+            // Высчитываем высоту и ширину видимой области на этом расстоянии
+            const visibleHeight = 2 * Math.tan(vFOV / 2) * distance;
+            const visibleWidth = visibleHeight * camera.aspect;
+
+            // Куб имеет размер 3 (от центра по 1.5). Добавляем запас (margin), чтобы точно не резался
+            const margin = 2; 
+            const maxX = Math.max(0, (visibleWidth / 2) - margin);
+            const maxY = Math.max(0, (visibleHeight / 2) - margin);
+
+            // Генерируем случайные X и Y в безопасных пределах
+            const randomX = (Math.random() * 2 - 1) * maxX;
+            const randomY = (Math.random() * 2 - 1) * maxY;
+
+            return new THREE.Vector3(randomX, randomY, -5);
+        }
 
         document.addEventListener('click', (event) => {
-            // Вычисляем координаты мыши в нормализованном виде
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            // Находим пересечения луча с объектами сцены
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObject(cube);
 
-            if (intersects.length > 0) {
-                // Если кликнули по кубу: меняем цвет на зеленый и крутим
-                cube.material.color.setHex(0x00ff88);
-                cube.material.opacity = 0.8;
-                isSpinning = true;
+            // Если кликнули по кубу и он еще не взорван
+            if (intersects.length > 0 && !isExploding) {
+                isExploding = true;
+                cube.visible = false; // Прячем основной куб
+
+                // Создаем осколки (взрыв)
+                const sparkCount = 80;
+                const explodeGeo = new THREE.BufferGeometry();
+                const positions = new Float32Array(sparkCount * 3);
+                const velocities = [];
+
+                for(let i = 0; i < sparkCount; i++) {
+                    positions[i*3] = cube.position.x;
+                    positions[i*3+1] = cube.position.y;
+                    positions[i*3+2] = cube.position.z;
+
+                    // Задаем случайное направление разлета для каждой искры
+                    velocities.push({
+                        x: (Math.random() - 0.5) * 0.8,
+                        y: (Math.random() - 0.5) * 0.8,
+                        z: (Math.random() - 0.5) * 0.8
+                    });
+                }
                 
-                // Возвращаем обратно через полсекунды
+                explodeGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                const explodeMat = new THREE.PointsMaterial({ color: 0x00ff88, size: 0.15, transparent: true });
+                explosionGroup = new THREE.Points(explodeGeo, explodeMat);
+                explosionGroup.userData.velocities = velocities;
+                scene.add(explosionGroup);
+
+                // Через 600мс удаляем осколки и респавним куб
                 setTimeout(() => {
-                    isSpinning = false;
-                    cube.material.color.setHex(0xbc13fe);
-                    cube.material.opacity = 0.3;
-                }, 500);
+                    scene.remove(explosionGroup);
+                    explodeGeo.dispose();
+                    explodeMat.dispose();
+                    explosionGroup = null;
+
+                    // Получаем безопасную точку и перемещаем туда куб
+                    const newPos = getSafeRandomPosition();
+                    cube.position.copy(newPos);
+                    
+                    cube.visible = true;
+                    isExploding = false;
+                }, 600);
             }
         });
 
         // Анимация 3D сцены
+        const clock = new THREE.Clock();
         function animate() {
             requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
 
-            // Эффект параллакса от мыши
             targetX = mouseX * 0.001;
             targetY = mouseY * 0.001;
             
-            // Если кликнули, крутим быстро, если нет - плавно
-            if(isSpinning) {
-                cube.rotation.x += 0.2;
-                cube.rotation.y += 0.2;
-            } else {
+            if (!isExploding) {
+                // Обычное поведение куба
                 cube.rotation.x += 0.005;
                 cube.rotation.y += 0.005;
-                // Легкое покачивание от мыши
                 cube.rotation.x += 0.05 * (targetY - cube.rotation.x);
                 cube.rotation.y += 0.05 * (targetX - cube.rotation.y);
+            } else if (explosionGroup) {
+                // Анимация разлета осколков
+                const positions = explosionGroup.geometry.attributes.position.array;
+                const vels = explosionGroup.userData.velocities;
+                
+                for(let i = 0; i < vels.length; i++) {
+                    positions[i*3] += vels[i].x;
+                    positions[i*3+1] += vels[i].y;
+                    positions[i*3+2] += vels[i].z;
+                }
+                explosionGroup.geometry.attributes.position.needsUpdate = true;
+                // Искры плавно затухают
+                explosionGroup.material.opacity = Math.max(0, explosionGroup.material.opacity - 0.03);
             }
+
+            particlesMesh.rotation.y = elapsedTime * 0.05;
 
             renderer.render(scene, camera);
         }
