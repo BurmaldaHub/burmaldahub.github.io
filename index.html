@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Burmalda Hub | Premium Script</title>
+    <title>Burmalda Hub | Cyber Overload</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -11,14 +11,14 @@
         :root {
             --bg-color: #07050d;
             --accent-main: #bc13fe;
-            --accent-glow: rgba(188, 19, 254, 0.4);
+            --accent- glow: rgba(188, 19, 254, 0.5);
             --card-bg: rgba(20, 15, 30, 0.7);
             --text-main: #ffffff;
             --text-secondary: #a09bab;
             --discord-color: #5865F2;
         }
 
-        /* Убираем стандартный курсор везде, кроме мобилок */
+        /* Убираем курсор на десктопах */
         @media (pointer: fine) {
             * {
                 cursor: none !important;
@@ -37,17 +37,6 @@
             align-items: center;
             overflow-x: hidden;
             padding-bottom: 120px;
-        }
-
-        /* 3D Canvas на задний фон */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1; /* Помещаем за всеми элементами */
-            pointer-events: none; /* Пропускаем клики сквозь канвас к кнопкам */
         }
 
         /* КАСТОМНЫЙ КУРСОР - ПРИЦЕЛ */
@@ -109,7 +98,18 @@
             * { cursor: auto !important; }
         }
 
-        /* ОСТАЛЬНОЙ ДИЗАЙН САЙТА */
+        /* 3D Scene Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Помещаем за всеми элементами */
+            pointer-events: none; /* Кнопки кликабельны сквозь канвас */
+        }
+
+        /* Навигация */
         nav {
             width: 100%;
             padding: 20px 50px;
@@ -147,11 +147,13 @@
             animation: pulse-green 2s infinite;
         }
 
+        /* Главный блок (Hero) */
         .hero {
             margin-top: 120px;
             text-align: center;
             padding: 50px 20px;
             max-width: 800px;
+            z-index: 10;
         }
 
         .hero h1 {
@@ -192,6 +194,7 @@
             background: #4752c4;
         }
 
+        /* ИГРЫ И СКРИПТЫ */
         .scripts-container {
             width: 100%;
             max-width: 800px;
@@ -248,6 +251,7 @@
             padding: 8px 16px;
             border-radius: 6px;
             font-weight: 800;
+            cursor: pointer;
             transition: 0.3s;
             margin-left: 15px;
             text-transform: uppercase;
@@ -258,6 +262,7 @@
             transform: scale(1.05);
         }
 
+        /* ФИЧИ */
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -289,6 +294,7 @@
         .feature-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; color: #fff; }
         .feature-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
 
+        /* КОМАНДА */
         .team-section { margin-top: 60px; text-align: center; width: 100%; z-index: 10; }
         .team-title { font-size: 2rem; font-weight: 900; text-transform: uppercase; margin-bottom: 30px; text-shadow: 0 0 20px var(--accent-glow); }
         .team-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
@@ -298,6 +304,7 @@
 
         .footer-section { margin-top: 60px; text-align: center; padding: 20px; z-index: 10; }
 
+        /* ПЛЕЕР */
         .player-container {
             position: fixed;
             bottom: 30px;
@@ -376,7 +383,7 @@
         </div>
         <div class="feature-card">
             <div class="feature-icon">⚡</div>
-            <div class="feature-title">Neverlose UI Library</div>
+            <div class="feature-title">Powered by Luna</div>
             <div class="feature-desc">Powered by the premium Neverlose UI library. Experience a sleek layout, maximum FPS, and incredibly smooth animations.</div>
         </div>
         <div class="feature-card">
@@ -387,7 +394,7 @@
     </div>
 
     <div class="team-section">
-        <div class="team-title">Our Team</div>
+        <div class="team-title hoverable-glitch">Our Team</div>
         <div class="team-grid">
             <div class="team-card">
                 <div class="team-role">Owner</div>
@@ -494,22 +501,8 @@
             opacity: 0.3
         });
         const cube = new THREE.Mesh(geometry, material);
-        
-        // Смещаем куб немного вправо и вверх, чтобы текст его не перекрывал
-        cube.position.set(3, 1, -5); 
+        cube.position.set(3, 1, -5); // Смещаем куб немного вправо и вверх
         scene.add(cube);
-
-        // Создаем звезды (частицы) на фоне
-        const particlesGeo = new THREE.BufferGeometry();
-        const particlesCount = 300;
-        const posArray = new Float32Array(particlesCount * 3);
-        for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 30; // Раскидываем по экрану
-        }
-        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particleMaterial = new THREE.PointsMaterial({ size: 0.05, color: 0xbc13fe, transparent: true, opacity: 0.5 });
-        const particlesMesh = new THREE.Points(particlesGeo, particleMaterial);
-        scene.add(particlesMesh);
 
         camera.position.z = 5;
 
@@ -532,8 +525,11 @@
         let isSpinning = false; // Флаг быстрой раскрутки
 
         document.addEventListener('click', (event) => {
+            // Вычисляем координаты мыши в нормализованном виде
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Находим пересечения луча с объектами сцены
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObject(cube);
 
@@ -553,10 +549,8 @@
         });
 
         // Анимация 3D сцены
-        const clock = new THREE.Clock();
         function animate() {
             requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
 
             // Эффект параллакса от мыши
             targetX = mouseX * 0.001;
@@ -573,9 +567,6 @@
                 cube.rotation.x += 0.05 * (targetY - cube.rotation.x);
                 cube.rotation.y += 0.05 * (targetX - cube.rotation.y);
             }
-
-            // Плавное движение звезд
-            particlesMesh.rotation.y = elapsedTime * 0.05;
 
             renderer.render(scene, camera);
         }
