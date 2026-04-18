@@ -30,6 +30,7 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            padding-bottom: 100px; /* Чтобы плеер не перекрывал текст */
         }
 
         /* Навигация */
@@ -104,14 +105,14 @@
             justify-content: space-between;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
             position: relative;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .code {
             font-family: 'JetBrains Mono', monospace;
             color: #e0aaff;
-            font-size: 1rem;
+            font-size: 0.9rem;
             overflow-x: auto;
             white-space: nowrap;
         }
@@ -142,7 +143,7 @@
             max-width: 1000px;
             width: 100%;
             padding: 20px;
-            margin-top: 40px;
+            margin-top: 20px;
             box-sizing: border-box;
         }
 
@@ -177,6 +178,55 @@
             color: var(--text-secondary);
             font-size: 0.95rem;
             line-height: 1.5;
+        }
+
+        /* Блок Команды */
+        .team-section {
+            margin-top: 60px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .team-title {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .team-card {
+            background: rgba(15, 10, 24, 0.8);
+            border: 1px solid rgba(188, 19, 254, 0.2);
+            border-radius: 12px;
+            padding: 20px 40px;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .team-role {
+            color: var(--accent-main);
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .team-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
         }
 
         @keyframes pulse-green {
@@ -235,7 +285,7 @@
         <p>Ультимативный мобильный хаб. Написан с нуля. Плавный интерфейс, максимальная производительность и мощный функционал для твоих любимых режимов.</p>
         
         <div class="script-box">
-            <div class="code" id="scriptCode">loadstring(game:HttpGet("https://raw.githubusercontent.com/raspv/burmalda/main/loader.lua"))()</div>
+            <div class="code" id="scriptCode">loadstring(game:HttpGet("https://raw.githubusercontent.com/BurmaldaHub/Burmalda/refs/heads/main/BurmaldaFree"))()</div>
             <button class="copy-btn" onclick="copyScript()">Copy</button>
         </div>
     </div>
@@ -255,6 +305,24 @@
             <div class="feature-icon">🎯</div>
             <div class="feature-title">Top Tier Features</div>
             <div class="feature-desc">Продвинутый Auto-Farm, точнейший ESP и Aimbot. Всё оптимизировано для работы без лагов даже на долгих сессиях.</div>
+        </div>
+    </div>
+
+    <div class="team-section">
+        <div class="team-title">Our Team</div>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-role">Owner</div>
+                <div class="team-name">evreymov</div>
+            </div>
+            <div class="team-card">
+                <div class="team-role">Lead Dev</div>
+                <div class="team-name">wezm</div>
+            </div>
+            <div class="team-card">
+                <div class="team-role">Community Manager</div>
+                <div class="team-name">batya</div>
+            </div>
         </div>
     </div>
 
